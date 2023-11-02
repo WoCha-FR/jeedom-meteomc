@@ -571,8 +571,29 @@ class meteomc extends eqLogic {
     $affVenProb = $this->getConfiguration('affvenprob', 1);
     $affGelProb = $this->getConfiguration('affgelprob', 1);
     $affBrouill = $this->getConfiguration('affbrouill', 1);
+    $_html = '';
+    // Version mobile
+    if ($version == 'mobile') {
+      // Condition en Cours
+      if ($affPeriodN == 1) {
+        $_html.= '<div style="background: url(\''.$imgdir.'/#weatherimg_p#\') no-repeat center; background-size: 65px 65px; height: 65px;"></div>';
+        $_html.= '<div style="text-align:center">#weathertxt_p# </div>';
+        $_html.= '<div style="text-align:center">#tact#°C </div>';
+      }
+      $_html.= '<div style="text-align:center">';
+      for ($i=0; $i<$affNbJours; $i++) {
+        $_html.= '<div style="display: inline-block;margin-right : 4px;">';
+        $_html.= '<div style="text-align:center; font-size: 0.8em!important;">#JOUR'.$i.'# #DATE'.$i.'#</div>';
+        $_html.= '<div style="background: url(\''.$imgdir.'/#weatherimg_j'.$i.'#\') no-repeat center; background-size: 32px 32px; height: 32px;"></div>';
+        $_html.= '<div style="text-align:center; font-size: 0.8em!important;">#tmin_j'.$i.'#°C / #tmax_j'.$i.'#°C </div>';
+        $_html.= '</div>';
+      }
+      $_html.= '</div>';
+      // Renvoie
+      return $_html;
+    }
     // Génération HTML
-    $_html = '<div id="meteoMC#uid#" class="meteoMC">';
+    $_html.= '<div id="meteoMC#uid#" class="meteoMC">';
     $_html.= '<div class="meteoPrevJours" data-equipement="#uid#">';
     $_html.= '<table>';
     // Ligne 1: Entete
@@ -759,18 +780,19 @@ class meteomc extends eqLogic {
   }
 
   public function toHtml($_version = 'dashboard') {
-    log::add(__CLASS__, 'debug', 'To html: ' . $this->getName());
     // Depuis cache ?
     $replace = $this->preToHtml($_version);
     if (!is_array($replace)) {
       log::add(__CLASS__, 'debug', 'To html en cache: ' . $this->getName());
       return $replace;
+    } else {
+      log::add(__CLASS__, 'debug', 'To html: ' . $this->getName());
     }
     $version = jeedom::versionAlias($_version);
     log::add(__CLASS__, 'debug', 'To html version: '.$version);
-    // Panneau principal
+    // Génération code HTML
     $html_j = $this->makeMainWidget($version);
-    // Remplacement tableau Principal
+
     $tst_j = strtotime('today');
     $tst_d = strtotime('tomorrow');
     for ($i=0; $i<$this->getConfiguration('affnbjours', 5); $i++) {

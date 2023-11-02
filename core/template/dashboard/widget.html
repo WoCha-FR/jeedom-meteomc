@@ -1,25 +1,21 @@
-<div class="eqLogic eqLogic-widget allowResize" data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width: #width#;height: #height#;#style#">
-  <div style="text-align:center" class="widget-name">
-    <span class="warning" title="#alert_name#">
+<div class="eqLogic eqLogic-widget text-center allowResize" data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width: #width#;height: #height#;#style#">
+  <div class="widget-name">
+    <span style="color:#background-color#" title="#alert_name#">
       <i class='#alert_icon#'></i>
     </span>
     <span class="cmd refresh pull-right cursor" data-cmd_id="#refresh_id#">
       <i class="fas fa-sync"></i>
     </span>
-    <a href="#eqLink#">#name_display#<span class="object_name">#object_name#</span></a>
+    <span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
+    <a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
   </div>
   #tabHtmlJours#
   <script>
-    if ('#refresh_id#' != '') {
-      $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
-        jeedom.cmd.execute({id: '#refresh_id#'})
-      })
-    } else {
-      $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove()
-    }
-  </script>  
+    document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh').addEventListener('click', function() {
+      jeedom.cmd.execute({ id: '#refresh_id#' })
+    })
+  </script>
 </div>
-
 <style>
   /* CSS GLOBAL */
   .meteoMC {

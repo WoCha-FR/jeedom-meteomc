@@ -3,7 +3,7 @@
   "name" : "MeteoMC",
   "description": {
     "fr_FR" : "Récupération des prévisions météo depuis L'API de Météo Concept.",
-    "en_US" : ""
+    "en_US" : "Retrieve weather forecasts from the Météo Concept API."
   },
   "licence": "AGPL",
   "author": "Wocha",
@@ -18,5 +18,5 @@
   "documentation_beta": "https://WoCha-FR.github.io/jeedom-meteomc/#language#/index_beta",
   "issue": "https://github.com/WoCha-FR/jeedom-meteomc/issues",
   "language": ["fr_FR", "en_US"],
-  "compatibility": ["miniplus","rpi","docker","diy","v4","atlas","smart"]
+  "compatibility": ["miniplus","rpi","docker","diy","v4","atlas","smart","mobile"]
 }
