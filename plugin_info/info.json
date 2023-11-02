@@ -12,11 +12,11 @@
   "hasDependency": false,
   "hasOwnDeamon": false,
   "maxDependancyInstallTime": 0,
-  "changelog": "https://wocha-fr.github.io/jeedom-meteomc/#language#/changelog",
-  "documentation": "https://wocha-fr.github.io/jeedom-meteomc/#language#/",
-  "changelog_beta": "https://wocha-fr.github.io/jeedom-meteomc/#language#/changelog_beta",
-  "documentation_beta": "https://wocha-fr.github.io/jeedom-meteomc/#language#/index_beta",
+  "changelog": "https://WoCha-FR.github.io/jeedom-meteomc/#language#/changelog",
+  "documentation": "https://WoCha-FR.github.io/jeedom-meteomc/#language#/",
+  "changelog_beta": "https://WoCha-FR.github.io/jeedom-meteomc/#language#/changelog_beta",
+  "documentation_beta": "https://WoCha-FR.github.io/jeedom-meteomc/#language#/index_beta",
   "issue": "https://github.com/WoCha-FR/jeedom-meteomc/issues",
   "language": ["fr_FR", "en_US"],
-  "compatibility": ["rpi","docker","diy","v4","atlas","smart"]
+  "compatibility": ["miniplus","rpi","docker","diy","v4","atlas","smart"]
 }

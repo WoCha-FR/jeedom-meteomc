@@ -26,10 +26,8 @@ $('.eqLogicAttr[data-l1key=id]').change(function () {
         /* Masquage */
         if ( data.logicalId.length != 0 ) {
           $(".eqLogicAttr[data-l1key=configuration][data-l2key=meteomcville]").prop( "disabled", true );
-          $(".eqLogicAttr[data-l1key=configuration][data-l2key=meteomcmode]").prop( "disabled", true );
         } else {
           $(".eqLogicAttr[data-l1key=configuration][data-l2key=meteomcville]").prop( "disabled", false );
-          $(".eqLogicAttr[data-l1key=configuration][data-l2key=meteomcmode]").prop( "disabled", false );
         }
       }
     });
@@ -84,32 +82,256 @@ function addCmdToTable(_cmd) {
   if (!isset(_cmd.configuration)) {
       _cmd.configuration = {};
   }
-  var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
-  tr += '<td class="hidden-xs">'
-  tr += '<span class="cmdAttr" data-l1key="id"></span>'
-  tr += '</td>'
-  tr += '<td>';
-  tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" style="display : none;">';
-  tr += '<input class="cmdAttr form-control input-sm" data-l1key="subType" style="display : none;">';
-  tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width: 200px;" placeholder="{{Nom}}"></td>';
-  tr += '<td>';
-  tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>'; 
-  tr += '</td>';
-  tr += '<td>';
-  if(!isset(_cmd.type) || _cmd.type == 'info' ){
+  // Onglet J0
+  if (init(_cmd.configuration.groupe) == 'j0') {
+    var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="id"></span>'
+    tr += '<span class="cmdAttr" data-l1key="type" style="display: none;"></span>';
+    tr += '<span class="cmdAttr" data-l1key="subType" style="display: none;"></span></td>';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="name"></span></td>';
+    tr += '<td><span class="cmdAttr" data-l1key="htmlstate"></span></td>';
+    tr += '<td>';
+    if(!isset(_cmd.type) || _cmd.type == 'info' ){
       tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+    }
+    tr += '</td><td>';
+    if (is_numeric(_cmd.id)) {
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
+      if (init(_cmd.type) == 'action') {
+        tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+      }
+    }
+    tr += '</tr>';
+    $('#commandtab_j0 tbody').append(tr);
+    $('#commandtab_j0 tbody tr').last().setValues(_cmd, '.cmdAttr');
+    if (isset(_cmd.type)) {
+      $('#commandtab_j0 tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+    }
+    jeedom.cmd.changeType($('commandtab_j0 tbody tr').last(), init(_cmd.subType));
   }
-  tr += '</td>';
-  tr += '<td>';
-  if (is_numeric(_cmd.id)) {
+  // Onglet J0 Periods
+  if (init(_cmd.configuration.groupe) == 'j0_periods') {
+    var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="id"></span>'
+    tr += '<span class="cmdAttr" data-l1key="type" style="display: none;"></span>';
+    tr += '<span class="cmdAttr" data-l1key="subType" style="display: none;"></span></td>';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="name"></span></td>';
+    tr += '<td><span class="cmdAttr" data-l1key="htmlstate"></span></td>';
+    tr += '<td>';
+    if(!isset(_cmd.type) || _cmd.type == 'info' ){
+      tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+    }
+    tr += '</td><td>';
+    if (is_numeric(_cmd.id)) {
       tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
       tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+    }
+    tr += '</tr>';
+    $('#commandtab_j0p tbody').append(tr);
+    $('#commandtab_j0p tbody tr').last().setValues(_cmd, '.cmdAttr');
+    if (isset(_cmd.type)) {
+      $('#commandtab_j0p tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+    }
+    jeedom.cmd.changeType($('commandtab_j0p tbody tr').last(), init(_cmd.subType));
   }
-  tr += '</tr>';
-  $('#table_cmd tbody').append(tr);
-  $('#table_cmd tbody tr').last().setValues(_cmd, '.cmdAttr');
-  if (isset(_cmd.type)) {
-      $('#table_cmd tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+  // Onglet J1
+  if (init(_cmd.configuration.groupe) == 'j1') {
+    var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="id"></span>'
+    tr += '<span class="cmdAttr" data-l1key="type" style="display: none;"></span>';
+    tr += '<span class="cmdAttr" data-l1key="subType" style="display: none;"></span></td>';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="name"></span></td>';
+    tr += '<td><span class="cmdAttr" data-l1key="htmlstate"></span></td>';
+    tr += '<td>';
+    if(!isset(_cmd.type) || _cmd.type == 'info' ){
+      tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+    }
+    tr += '</td><td>';
+    if (is_numeric(_cmd.id)) {
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+    }
+    tr += '</tr>';
+    $('#commandtab_j1 tbody').append(tr);
+    $('#commandtab_j1 tbody tr').last().setValues(_cmd, '.cmdAttr');
+    if (isset(_cmd.type)) {
+      $('#commandtab_j1 tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+    }
+    jeedom.cmd.changeType($('commandtab_j1 tbody tr').last(), init(_cmd.subType));
   }
-  jeedom.cmd.changeType($('#table_cmd tbody tr').last(), init(_cmd.subType));
+  // Onglet J1 Periods
+  if (init(_cmd.configuration.groupe) == 'j1_periods') {
+    var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="id"></span>'
+    tr += '<span class="cmdAttr" data-l1key="type" style="display: none;"></span>';
+    tr += '<span class="cmdAttr" data-l1key="subType" style="display: none;"></span></td>';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="name"></span></td>';
+    tr += '<td><span class="cmdAttr" data-l1key="htmlstate"></span></td>';
+    tr += '<td>';
+    if(!isset(_cmd.type) || _cmd.type == 'info' ){
+      tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+    }
+    tr += '</td><td>';
+    if (is_numeric(_cmd.id)) {
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+    }
+    tr += '</tr>';
+    $('#commandtab_j1p tbody').append(tr);
+    $('#commandtab_j1p tbody tr').last().setValues(_cmd, '.cmdAttr');
+    if (isset(_cmd.type)) {
+      $('#commandtab_j1p tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+    }
+    jeedom.cmd.changeType($('commandtab_j1p tbody tr').last(), init(_cmd.subType));
+  }
+  // Onglet J2
+  if (init(_cmd.configuration.groupe) == 'j2') {
+    var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="id"></span>'
+    tr += '<span class="cmdAttr" data-l1key="type" style="display: none;"></span>';
+    tr += '<span class="cmdAttr" data-l1key="subType" style="display: none;"></span></td>';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="name"></span></td>';
+    tr += '<td><span class="cmdAttr" data-l1key="htmlstate"></span></td>';
+    tr += '<td>';
+    if(!isset(_cmd.type) || _cmd.type == 'info' ){
+      tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+    }
+    tr += '</td><td>';
+    if (is_numeric(_cmd.id)) {
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+    }
+    tr += '</tr>';
+    $('#commandtab_j2 tbody').append(tr);
+    $('#commandtab_j2 tbody tr').last().setValues(_cmd, '.cmdAttr');
+    if (isset(_cmd.type)) {
+      $('#commandtab_j2 tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+    }
+    jeedom.cmd.changeType($('commandtab_j2 tbody tr').last(), init(_cmd.subType));
+  }
+  // Onglet J2 Periods
+  if (init(_cmd.configuration.groupe) == 'j2_periods') {
+    var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="id"></span>'
+    tr += '<span class="cmdAttr" data-l1key="type" style="display: none;"></span>';
+    tr += '<span class="cmdAttr" data-l1key="subType" style="display: none;"></span></td>';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="name"></span></td>';
+    tr += '<td><span class="cmdAttr" data-l1key="htmlstate"></span></td>';
+    tr += '<td>';
+    if(!isset(_cmd.type) || _cmd.type == 'info' ){
+      tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+    }
+    tr += '</td><td>';
+    if (is_numeric(_cmd.id)) {
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+    }
+    tr += '</tr>';
+    $('#commandtab_j2p tbody').append(tr);
+    $('#commandtab_j2p tbody tr').last().setValues(_cmd, '.cmdAttr');
+    if (isset(_cmd.type)) {
+      $('#commandtab_j2p tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+    }
+    jeedom.cmd.changeType($('commandtab_j2p tbody tr').last(), init(_cmd.subType));
+  }
+  // Onglet J3
+  if (init(_cmd.configuration.groupe) == 'j3') {
+    var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="id"></span>'
+    tr += '<span class="cmdAttr" data-l1key="type" style="display: none;"></span>';
+    tr += '<span class="cmdAttr" data-l1key="subType" style="display: none;"></span></td>';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="name"></span></td>';
+    tr += '<td><span class="cmdAttr" data-l1key="htmlstate"></span></td>';
+    tr += '<td>';
+    if(!isset(_cmd.type) || _cmd.type == 'info' ){
+      tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+    }
+    tr += '</td><td>';
+    if (is_numeric(_cmd.id)) {
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+    }
+    tr += '</tr>';
+    $('#commandtab_j3 tbody').append(tr);
+    $('#commandtab_j3 tbody tr').last().setValues(_cmd, '.cmdAttr');
+    if (isset(_cmd.type)) {
+      $('#commandtab_j3 tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+    }
+    jeedom.cmd.changeType($('commandtab_j3 tbody tr').last(), init(_cmd.subType));
+  }
+  // Onglet J3 Periods
+  if (init(_cmd.configuration.groupe) == 'j3_periods') {
+    var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="id"></span>'
+    tr += '<span class="cmdAttr" data-l1key="type" style="display: none;"></span>';
+    tr += '<span class="cmdAttr" data-l1key="subType" style="display: none;"></span></td>';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="name"></span></td>';
+    tr += '<td><span class="cmdAttr" data-l1key="htmlstate"></span></td>';
+    tr += '<td>';
+    if(!isset(_cmd.type) || _cmd.type == 'info' ){
+      tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+    }
+    tr += '</td><td>';
+    if (is_numeric(_cmd.id)) {
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+    }
+    tr += '</tr>';
+    $('#commandtab_j3p tbody').append(tr);
+    $('#commandtab_j3p tbody tr').last().setValues(_cmd, '.cmdAttr');
+    if (isset(_cmd.type)) {
+      $('#commandtab_j3p tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+    }
+    jeedom.cmd.changeType($('commandtab_j3p tbody tr').last(), init(_cmd.subType));
+  }
+  // Onglet J4
+  if (init(_cmd.configuration.groupe) == 'j4') {
+    var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="id"></span>'
+    tr += '<span class="cmdAttr" data-l1key="type" style="display: none;"></span>';
+    tr += '<span class="cmdAttr" data-l1key="subType" style="display: none;"></span></td>';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="name"></span></td>';
+    tr += '<td><span class="cmdAttr" data-l1key="htmlstate"></span></td>';
+    tr += '<td>';
+    if(!isset(_cmd.type) || _cmd.type == 'info' ){
+      tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+    }
+    tr += '</td><td>';
+    if (is_numeric(_cmd.id)) {
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+    }
+    tr += '</tr>';
+    $('#commandtab_j4 tbody').append(tr);
+    $('#commandtab_j4 tbody tr').last().setValues(_cmd, '.cmdAttr');
+    if (isset(_cmd.type)) {
+      $('#commandtab_j4 tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+    }
+    jeedom.cmd.changeType($('commandtab_j4 tbody tr').last(), init(_cmd.subType));
+  }
+  // Onglet J4 Periods
+  if (init(_cmd.configuration.groupe) == 'j4_periods') {
+    var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="id"></span>'
+    tr += '<span class="cmdAttr" data-l1key="type" style="display: none;"></span>';
+    tr += '<span class="cmdAttr" data-l1key="subType" style="display: none;"></span></td>';
+    tr += '<td class="hidden-xs"><span class="cmdAttr" data-l1key="name"></span></td>';
+    tr += '<td><span class="cmdAttr" data-l1key="htmlstate"></span></td>';
+    tr += '<td>';
+    if(!isset(_cmd.type) || _cmd.type == 'info' ){
+      tr += '<span><label class="checkbox-inline"><input type="checkbox" class="cmdAttr checkbox-inline" data-l1key="isHistorized" checked/>{{Historiser}}</label></span> ';
+    }
+    tr += '</td><td>';
+    if (is_numeric(_cmd.id)) {
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
+      tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+    }
+    tr += '</tr>';
+    $('#commandtab_j4p tbody').append(tr);
+    $('#commandtab_j4p tbody tr').last().setValues(_cmd, '.cmdAttr');
+    if (isset(_cmd.type)) {
+      $('#commandtab_j4p tbody tr:last .cmdAttr[data-l1key=type]').value(init(_cmd.type));
+    }
+    jeedom.cmd.changeType($('commandtab_j4p tbody tr').last(), init(_cmd.subType));
+  }
 }
