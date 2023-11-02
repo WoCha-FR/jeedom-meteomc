@@ -374,7 +374,7 @@ class meteomc extends eqLogic {
       0 => __('Nuit', __FILE__),
       1 => __('Matin', __FILE__),
       2 => __('Après-midi', __FILE__),
-      3 => __('Soir', __FILE__)
+      3 => __('Soirée', __FILE__)
     );
     return $values[$_periodId];
   }
@@ -792,7 +792,68 @@ class meteomc extends eqLogic {
     log::add(__CLASS__, 'debug', 'To html version: '.$version);
     // Génération code HTML
     $html_j = $this->makeMainWidget($version);
-
+    // TTT des données : Période en cours
+    if ($this->getConfiguration('affpencours', 1) == 1) {
+      // Quelle période afficher ?
+      $_now = (new DateTime('now'))->format('Gi');
+      if ($_now < 530) {
+        $_p = 0;
+      } else if ($_now < 1130) {
+        $_p = 1;
+      } else if ($_now < 1530) {
+        $_p = 2;
+      } else {
+        $_p = 3;
+      }
+      // Variable de la période
+      $i = 'j0p'.$_p;
+      // Periode
+      $period = $this->getCmd('info', 'period_' . $i);
+      // Image Weather
+      if (is_object($period) && $period->execCmd() == __('Nuit', __FILE__)) {
+        $weather = $this->getCmd('info', 'weather_' . $i);
+        $replace['#weatherimg_p#'] = is_object($weather) ? self::getConditionImg($weather->execCmd(), true) : '';
+      } else {
+        $weather = $this->getCmd('info', 'weather_' . $i);
+        $replace['#weatherimg_p#'] = is_object($weather) ? self::getConditionImg($weather->execCmd()) : '';
+      }
+      // Texte Weather
+      $weathertxt = $this->getCmd('info', 'weathertxt_' . $i);
+      $replace['#weathertxt_p#'] = is_object($weathertxt) ? $weathertxt->execCmd() : '';
+      // Temperature
+      $tact = $this->getCmd('info', 'temp2m_' . $i);
+      $replace['#tact#'] = is_object($tact) ? $tact->execCmd() : '';
+      // Dashboard Seulement
+      if ($version != 'mobile') {
+        $replace['#PNOW#'] = is_object($period) ? $period->execCmd() : '';
+        // Vent & rafales
+        $wind = $this->getCmd('info', 'wind10m_' . $i);
+        $dirw = $this->getCmd('info', 'dirwind10m_' . $i);
+        $gust = $this->getCmd('info', 'gust10m_' . $i);
+        $replace['#wind10m_p#'] = is_object($wind) ? $wind->execCmd() : '';
+        $replace['#dirwind10m_p#'] = is_object($dirw) ? $dirw->execCmd() : '';
+        $replace['#gust10m_p#'] = is_object($gust) ? $gust->execCmd() : '';
+        // Pluie & probabilité
+        $pluiemin = $this->getCmd('info', 'rr10_' . $i);
+        $pluiepro = $this->getCmd('info', 'probarain_' . $i);
+        $pluiemax = $this->getCmd('info', 'rr1_' . $i);
+        $replace['#rr10_p#'] = is_object($pluiemin) ? $pluiemin->execCmd() : '';
+        $replace['#probarain_p#'] = is_object($pluiepro) ? $pluiepro->execCmd() : '';
+        $replace['#rr1_p#'] = is_object($pluiemax) ? $pluiemax->execCmd() : '';
+        // Probabilité Vent70 & Vent100
+        $probven70 = $this->getCmd('info', 'probawind70_' . $i);
+        $probven100 = $this->getCmd('info', 'probawind100_' . $i);
+        $replace['#probawind70_p#'] = is_object($probven70) ? $probven70->execCmd() : '';
+        $replace['#probawind100_p#'] = is_object($probven100) ? $probven100->execCmd() : '';
+        // Probabilité Brouillard
+        $probfog = $this->getCmd('info', 'probafog_' . $i);
+        $replace['#probfog_p#'] = is_object($probfog) ? $probfog->execCmd() : '';
+        // Probabilité Gel
+        $probfrost = $this->getCmd('info', 'probafrost_' . $i);
+        $replace['#probfrost_p#'] = is_object($probfrost) ? $probfrost->execCmd() : '';
+      }
+    }
+    // Variables pour les jours
     $tst_j = strtotime('today');
     $tst_d = strtotime('tomorrow');
     for ($i=0; $i<$this->getConfiguration('affnbjours', 5); $i++) {
@@ -820,105 +881,50 @@ class meteomc extends eqLogic {
       $tmax = $this->getCmd('info', 'tmax_j' . $i);
       $replace['#tmin_j' . $i . '#'] = is_object($tmin) ? $tmin->execCmd() : '';
       $replace['#tmax_j' . $i . '#'] = is_object($tmax) ? $tmax->execCmd() : '';
-      // Lever & Coucher soleil
-      $sunrise = $this->getCmd('info', 'sunrise_j' . $i);
-      $sunset = $this->getCmd('info', 'sunset_j' . $i);
-      $replace['#sunset_j' . $i . '#'] = is_object($sunset) ? $sunset->execCmd() : '';
-      $replace['#sunrise_j' . $i . '#'] = is_object($sunrise) ? $sunrise->execCmd() : '';
-      // DureeJour & Différence
-      $duration = $this->getCmd('info', 'duration_day_j' . $i);
-      $diffduration = $this->getCmd('info', 'diff_duration_day_j' . $i);
-      $replace['#duration_day_j' . $i . '#'] = is_object($duration) ? $duration->execCmd() : '';
-      $replace['#diff_duration_day_j' . $i . '#'] = is_object($diffduration) ? $diffduration->execCmd() : '';
-      // Temps d'ensoleillement
-      $sunhours = $this->getCmd('info', 'sun_hours_j' . $i);
-      $replace['#sun_hours_j' . $i . '#'] = is_object($sunhours) ? $sunhours->execCmd() : '';
-      // Vent & rafales
-      $wind = $this->getCmd('info', 'wind10m_j' . $i);
-      $dirw = $this->getCmd('info', 'dirwind10m_j' . $i);
-      $gust = $this->getCmd('info', 'gust10m_j' . $i);
-      $replace['#wind10m_j' . $i . '#'] = is_object($wind) ? $wind->execCmd() : '';
-      $replace['#dirwind10m_j' . $i . '#'] = is_object($dirw) ? $dirw->execCmd() : '';
-      $replace['#gust10m_j' . $i . '#'] = is_object($gust) ? $gust->execCmd() : '';
-      // Pluie & probabilité
-      $pluiemin = $this->getCmd('info', 'rr10_j' . $i);
-      $pluiepro = $this->getCmd('info', 'probarain_j' . $i);
-      $pluiemax = $this->getCmd('info', 'rr1_j' . $i);
-      $replace['#rr10_j' . $i . '#'] = is_object($pluiemin) ? $pluiemin->execCmd() : '';
-      $replace['#probarain_j' . $i . '#'] = is_object($pluiepro) ? $pluiepro->execCmd() : '';
-      $replace['#rr1_j' . $i . '#'] = is_object($pluiemax) ? $pluiemax->execCmd() : '';
-      // Probabilité Vent70 & Vent100
-      $probven70 = $this->getCmd('info', 'probawind70_j' . $i);
-      $probven100 = $this->getCmd('info', 'probawind100_j' . $i);
-      $replace['#probawind70_j' . $i . '#'] = is_object($probven70) ? $probven70->execCmd() : '';
-      $replace['#probawind100_j' . $i . '#'] = is_object($probven100) ? $probven100->execCmd() : '';
-      // Probabilité Brouillard
-      $probfog = $this->getCmd('info', 'probafog_j' . $i);
-      $replace['#probfog_j' . $i . '#'] = is_object($probfog) ? $probfog->execCmd() : '';
-      // Probabilité Gel
-      $probfrost = $this->getCmd('info', 'probafrost_j' . $i);
-      $replace['#probfrost_j' . $i . '#'] = is_object($probfrost) ? $probfrost->execCmd() : '';
-      // Phase de Lune
-      $phaselune = $this->getCmd('info', 'moon_phase_j' . $i);
-      $replace['#moon_phase_j' . $i . '#'] = is_object($phaselune) ? $phaselune->execCmd() : '';
-    }
-    // Remplacement tableau Principal - Période en cours si demandée
-    if ($this->getConfiguration('affpencours', 1) == 1) {
-      // A quelle période commencer ?
-      $_now = (new DateTime('now'))->format('Gi');
-      if ($_now < 530) {
-        $_p = 0;
-      } else if ($_now < 1130) {
-        $_p = 1;
-      } else if ($_now < 1530) {
-        $_p = 2;
-      } else {
-        $_p = 3;
+      // Dashboard Seulement
+      if ($version != 'mobile') {
+        // Lever & Coucher soleil
+        $sunrise = $this->getCmd('info', 'sunrise_j' . $i);
+        $sunset = $this->getCmd('info', 'sunset_j' . $i);
+        $replace['#sunset_j' . $i . '#'] = is_object($sunset) ? $sunset->execCmd() : '';
+        $replace['#sunrise_j' . $i . '#'] = is_object($sunrise) ? $sunrise->execCmd() : '';
+        // DureeJour & Différence
+        $duration = $this->getCmd('info', 'duration_day_j' . $i);
+        $diffduration = $this->getCmd('info', 'diff_duration_day_j' . $i);
+        $replace['#duration_day_j' . $i . '#'] = is_object($duration) ? $duration->execCmd() : '';
+        $replace['#diff_duration_day_j' . $i . '#'] = is_object($diffduration) ? $diffduration->execCmd() : '';
+        // Temps d'ensoleillement
+        $sunhours = $this->getCmd('info', 'sun_hours_j' . $i);
+        $replace['#sun_hours_j' . $i . '#'] = is_object($sunhours) ? $sunhours->execCmd() : '';
+        // Vent & rafales
+        $wind = $this->getCmd('info', 'wind10m_j' . $i);
+        $dirw = $this->getCmd('info', 'dirwind10m_j' . $i);
+        $gust = $this->getCmd('info', 'gust10m_j' . $i);
+        $replace['#wind10m_j' . $i . '#'] = is_object($wind) ? $wind->execCmd() : '';
+        $replace['#dirwind10m_j' . $i . '#'] = is_object($dirw) ? $dirw->execCmd() : '';
+        $replace['#gust10m_j' . $i . '#'] = is_object($gust) ? $gust->execCmd() : '';
+        // Pluie & probabilité
+        $pluiemin = $this->getCmd('info', 'rr10_j' . $i);
+        $pluiepro = $this->getCmd('info', 'probarain_j' . $i);
+        $pluiemax = $this->getCmd('info', 'rr1_j' . $i);
+        $replace['#rr10_j' . $i . '#'] = is_object($pluiemin) ? $pluiemin->execCmd() : '';
+        $replace['#probarain_j' . $i . '#'] = is_object($pluiepro) ? $pluiepro->execCmd() : '';
+        $replace['#rr1_j' . $i . '#'] = is_object($pluiemax) ? $pluiemax->execCmd() : '';
+        // Probabilité Vent70 & Vent100
+        $probven70 = $this->getCmd('info', 'probawind70_j' . $i);
+        $probven100 = $this->getCmd('info', 'probawind100_j' . $i);
+        $replace['#probawind70_j' . $i . '#'] = is_object($probven70) ? $probven70->execCmd() : '';
+        $replace['#probawind100_j' . $i . '#'] = is_object($probven100) ? $probven100->execCmd() : '';
+        // Probabilité Brouillard
+        $probfog = $this->getCmd('info', 'probafog_j' . $i);
+        $replace['#probfog_j' . $i . '#'] = is_object($probfog) ? $probfog->execCmd() : '';
+        // Probabilité Gel
+        $probfrost = $this->getCmd('info', 'probafrost_j' . $i);
+        $replace['#probfrost_j' . $i . '#'] = is_object($probfrost) ? $probfrost->execCmd() : '';
+        // Phase de Lune
+        $phaselune = $this->getCmd('info', 'moon_phase_j' . $i);
+        $replace['#moon_phase_j' . $i . '#'] = is_object($phaselune) ? $phaselune->execCmd() : '';
       }
-      // Recupérations des données
-      $i = 'j0p'.$_p;
-      // Periode
-      $period = $this->getCmd('info', 'period_' . $i);
-      $replace['#PNOW#'] = is_object($period) ? $period->execCmd() : '';
-      // Image Weather
-      if (is_object($period) && $period->execCmd() == __('Nuit', __FILE__)) {
-        $weather = $this->getCmd('info', 'weather_' . $i);
-        $replace['#weatherimg_p#'] = is_object($weather) ? self::getConditionImg($weather->execCmd(), true) : '';
-      } else {
-        $weather = $this->getCmd('info', 'weather_' . $i);
-        $replace['#weatherimg_p#'] = is_object($weather) ? self::getConditionImg($weather->execCmd()) : '';
-      }
-      // Texte Weather
-      $weathertxt = $this->getCmd('info', 'weathertxt_' . $i);
-      $replace['#weathertxt_p#'] = is_object($weathertxt) ? $weathertxt->execCmd() : '';
-      // Temperature
-      $tact = $this->getCmd('info', 'temp2m_' . $i);
-      $replace['#tact#'] = is_object($tact) ? $tact->execCmd() : '';
-      // Vent & rafales
-      $wind = $this->getCmd('info', 'wind10m_' . $i);
-      $dirw = $this->getCmd('info', 'dirwind10m_' . $i);
-      $gust = $this->getCmd('info', 'gust10m_' . $i);
-      $replace['#wind10m_p#'] = is_object($wind) ? $wind->execCmd() : '';
-      $replace['#dirwind10m_p#'] = is_object($dirw) ? $dirw->execCmd() : '';
-      $replace['#gust10m_p#'] = is_object($gust) ? $gust->execCmd() : '';
-      // Pluie & probabilité
-      $pluiemin = $this->getCmd('info', 'rr10_' . $i);
-      $pluiepro = $this->getCmd('info', 'probarain_' . $i);
-      $pluiemax = $this->getCmd('info', 'rr1_' . $i);
-      $replace['#rr10_p#'] = is_object($pluiemin) ? $pluiemin->execCmd() : '';
-      $replace['#probarain_p#'] = is_object($pluiepro) ? $pluiepro->execCmd() : '';
-      $replace['#rr1_p#'] = is_object($pluiemax) ? $pluiemax->execCmd() : '';
-      // Probabilité Vent70 & Vent100
-      $probven70 = $this->getCmd('info', 'probawind70_' . $i);
-      $probven100 = $this->getCmd('info', 'probawind100_' . $i);
-      $replace['#probawind70_p#'] = is_object($probven70) ? $probven70->execCmd() : '';
-      $replace['#probawind100_p#'] = is_object($probven100) ? $probven100->execCmd() : '';
-      // Probabilité Brouillard
-      $probfog = $this->getCmd('info', 'probafog_' . $i);
-      $replace['#probfog_p#'] = is_object($probfog) ? $probfog->execCmd() : '';
-      // Probabilité Gel
-      $probfrost = $this->getCmd('info', 'probafrost_' . $i);
-      $replace['#probfrost_p#'] = is_object($probfrost) ? $probfrost->execCmd() : '';
     }
     // Remplacement dans le template
     $replace['#tabHtmlJours#'] = template_replace($replace, $html_j);
@@ -936,6 +942,8 @@ class meteomc extends eqLogic {
 }
 
 class meteomcCmd extends cmd {
+  public static $_widgetPossibility = array('custom' => false);
+
   public function execute($_options = array()) {
     if ($this->getLogicalId() == 'refresh' && $this->getEqLogic()->getIsEnable()) {
       log::add('meteomc', 'debug', 'Refresh requested for : '.$this->getEqLogic()->getName());
