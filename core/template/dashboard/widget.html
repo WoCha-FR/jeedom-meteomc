@@ -14,6 +14,11 @@
     document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh').addEventListener('click', function() {
       jeedom.cmd.execute({ id: '#refresh_id#' })
     })
+    function mouseClick(element) {
+      var equipement = $(element).parents('.eqLogic').attr('data-eqLogic_id');
+      var dayperiods = $(element).attr('id');
+      $('#md_modal').dialog({title: "#modaltxt#"}).load('index.php?v=d&plugin=meteomc&modal=details&eqLogic='+equipement+'&jour='+dayperiods).dialog('open');
+    }
   </script>
 </div>
 <style>

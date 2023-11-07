@@ -577,8 +577,8 @@ class meteomc extends eqLogic {
       // Condition en Cours
       if ($affPeriodN == 1) {
         $_html.= '<div style="background: url(\''.$imgdir.'/#weatherimg_p#\') no-repeat center; background-size: 65px 65px; height: 65px;"></div>';
-        $_html.= '<div style="text-align:center">#weathertxt_p# </div>';
-        $_html.= '<div style="text-align:center">#tact#°C </div>';
+        $_html.= '<div style="text-align:center; font-size: 0.8em!important;">#weathertxt_p# </div>';
+        $_html.= '<div style="text-align:center; font-size: 0.8em!important;">#tact#°C </div>';
       }
       $_html.= '<div style="text-align:center">';
       for ($i=0; $i<$affNbJours; $i++) {
@@ -604,7 +604,7 @@ class meteomc extends eqLogic {
     }
     for ($i=0; $i<$affNbJours; $i++) {
       $_html.= '<td class="tableCmdcss meteoMCTitre">';
-      $_html.= '<div class="meteoMCTitreDivJour">#JOUR'.$i.'# #DATE'.$i.'#</div></td>';
+      $_html.= '<div id="j'.$i.'" onclick="mouseClick(this)" class="meteoMCTitreDivJour" style="cursor: alias;">#JOUR'.$i.'# #DATE'.$i.'#</div></td>';
     }
     // Ligne 2: Image de prévision
     $_html.= '</tr><tr>';
@@ -810,11 +810,10 @@ class meteomc extends eqLogic {
       // Periode
       $period = $this->getCmd('info', 'period_' . $i);
       // Image Weather
-      if (is_object($period) && $period->execCmd() == __('Nuit', __FILE__)) {
-        $weather = $this->getCmd('info', 'weather_' . $i);
+      $weather = $this->getCmd('info', 'weather_' . $i);
+      if ($_p==0 || $_p==3) {
         $replace['#weatherimg_p#'] = is_object($weather) ? self::getConditionImg($weather->execCmd(), true) : '';
       } else {
-        $weather = $this->getCmd('info', 'weather_' . $i);
         $replace['#weatherimg_p#'] = is_object($weather) ? self::getConditionImg($weather->execCmd()) : '';
       }
       // Texte Weather
@@ -928,6 +927,7 @@ class meteomc extends eqLogic {
     }
     // Remplacement dans le template
     $replace['#tabHtmlJours#'] = template_replace($replace, $html_j);
+    $replace['#modaltxt#'] = __('Détails du jour', __FILE__);
     // Config utilisateur Jeedom
     $parameters = $this->getDisplay('parameters');
     if (is_array($parameters)) {
