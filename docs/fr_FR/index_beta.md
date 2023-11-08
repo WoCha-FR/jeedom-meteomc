@@ -16,12 +16,27 @@ Le plugin **MeteoMC** permet de récupérer les prévisions météorologiques d'
 # Compte MétéoConcept
 
 - Rendez-vous sur le site [MétéoConcept](https://api.meteo-concept.com/register/)
-- Créer un compte si vous n'en avez pas déjà un.
-- Une fois connecté à votre compte, cliquez sur "Mes abonnements"
+- Créer un compte si vous n'en avez pas déjà un. N'oubliez pas d'activer le compte en cliquant sur le lien reçu dans un mail.
+- Une fois connecté à [votre compte](https://api.meteo-concept.com/profile/), cliquez sur "Mes abonnements"
 - Choisir un abonnement "Basique" gratuit.
-- Créer un token pour le plugin.
+
+![Basique](../images/basique.png)
+
+- Vous êtes redirigé vers la page de configuration de votre abonnement. Cliquez sur "Afficher les Tokens".
+
+![Compte](../images/comptemc.png)
+
+- Ajoutez maintenant un token en cliquant sur "Ajouter un Token"
+
+![AjoutToken](../images/btntoken.png)
+
+- Configurer votre nouveau token comme ci-dessous.
 
 ![NewToken](../images/token.png)
+
+- Votre token est maintenant disponible en cliquant sur "Afficher"
+
+![infoToken](../images/listetoken.png)
 
 # Paramètres de configuration :
 
@@ -60,6 +75,10 @@ En dessous vous retrouvez les paramètres spécifiques de votre équipement:
 ## Version Desktop
 
 ![Desktop](../images/desktop.png)
+
+En cliquant sur la date voulue, vous obtenez le détail de la journée en 4 périodes.
+
+![Details](../images/details.png)
 
 ## Version Mobile
 

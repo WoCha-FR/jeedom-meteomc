@@ -1,4 +1,4 @@
-# Plugin MeteoMC - BETA
+# Plugin MeteoMC
 
 ## Description
 
