@@ -17,7 +17,11 @@
     function mouseClick(element) {
       var equipement = $(element).parents('.eqLogic').attr('data-eqLogic_id');
       var dayperiods = $(element).attr('id');
-      $('#md_modal').dialog({title: "#modaltxt#"}).load('index.php?v=d&plugin=meteomc&modal=details&eqLogic='+equipement+'&jour='+dayperiods).dialog('open');
+      if ($('#modal_infojour').length == 0) {
+        $('body').append('<div id="modal_infojour" title="#modaltxt#"></div>');
+        $("#modal_infojour").dialog({closeText: '', autoOpen: false, modal: true, height: 410, width: 580});
+      }
+      $('#modal_infojour').load('index.php?v=d&plugin=meteomc&modal=details&eqLogic='+equipement+'&jour='+dayperiods).dialog('open');
     }
   </script>
 </div>
