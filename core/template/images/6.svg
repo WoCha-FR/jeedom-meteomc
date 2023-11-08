@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="Calque_1" width="50" height="50" x="0" y="0" version="1.1">
+  <defs id="defs2288">
+    <style id="style2286" type="text/css">
+      <![CDATA[
+.fog:nth-of-type(4n) {
+	animation: fog 10s linear infinite -5s;
+}
+.fog:nth-of-type(4n+1) {
+	animation: fog 10s linear infinite -10s;
+}
+.fog:nth-of-type(4n+2) {
+	animation: fog 10s linear infinite -15s;
+}
+.fog:nth-of-type(4n+3) {
+	animation: fog 10s linear infinite;
+}
+@keyframes fog {
+	0% {
+		transform: translate(0px,0px);
+	}
+	33% {
+		transform: translate(-1px,1px);
+	}
+	66% {
+		transform: translate(1px,-1px);
+	}
+	100% {
+		transform: translate(0px,0px);
+	}
+}
+]]>
+    </style>
+  </defs>
+  <path id="path2105-2" d="M23.585 41.842H8.183c-1.503 0-2.718 1.27-2.718 2.836 0 1.569 1.215 2.842 2.718 2.842h15.402c1.504 0 2.721-1.27 2.721-2.842 0-1.563-1.217-2.836-2.72-2.836" class="fog" style="fill:#cbd5d8;fill-opacity:0.86734697;stroke-width:2.54280019"/>
+  <path id="path1533-9" d="M8.18 30.33a2.844 2.844 0 0 0-2.852 2.837 2.847 2.847 0 0 0 2.851 2.841c1.577 0 2.851-1.27 2.851-2.841a2.844 2.844 0 0 0-2.85-2.836" class="fog" style="fill:#cbd5d8;fill-opacity:0.86734697;stroke-width:2.60397148"/>
+  <path id="path2105-2-5" d="M43.318 30.33H15.916c-1.503 0-2.718 1.27-2.718 2.837 0 1.569 1.215 2.841 2.718 2.841h27.402c1.504 0 2.721-1.27 2.721-2.841 0-1.564-1.217-2.836-2.72-2.836" class="fog" style="fill:#cbd5d8;fill-opacity:0.86734697;stroke-width:2.54280019"/>
+  <path id="path2105-2-5-0" d="M44.632 17.83H3.23C1.726 17.83.51 19.1.51 20.668c0 1.569 1.215 2.841 2.719 2.841h41.402c1.504 0 2.721-1.27 2.721-2.841 0-1.564-1.217-2.836-2.721-2.836" class="fog" style="fill:#cbd5d8;fill-opacity:0.86734697;stroke-width:2.54280019"/>
+  <path id="path2105-2-4" d="M42.26 41.842h-9.403c-1.504 0-2.718 1.27-2.718 2.836 0 1.569 1.214 2.842 2.718 2.842h9.402c1.504 0 2.721-1.27 2.721-2.842 0-1.563-1.217-2.836-2.72-2.836" class="fog" style="fill:#cbd5d8;fill-opacity:0.86734697;stroke-width:2.54280019"/>
+  <path id="path2105-2-5-8" d="M29.496 4.907H8.094c-1.503 0-2.718 1.27-2.718 2.836 0 1.569 1.215 2.842 2.718 2.842h21.402c1.504 0 2.721-1.27 2.721-2.842 0-1.563-1.217-2.836-2.72-2.836" class="fog" style="fill:#cbd5d8;fill-opacity:0.86734697;stroke-width:2.54280019"/>
+  <path id="path2105-2-1" d="M43.412 4.907H36.01c-1.504 0-2.719 1.27-2.719 2.836 0 1.569 1.215 2.842 2.719 2.842h7.402c1.503 0 2.72-1.27 2.72-2.842 0-1.563-1.217-2.836-2.72-2.836" class="fog" style="fill:#cbd5d8;fill-opacity:0.86734697;stroke-width:2.54280019"/>
+</svg>

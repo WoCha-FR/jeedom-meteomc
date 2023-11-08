@@ -1,0 +1,85 @@
+<div class="eqLogic eqLogic-widget text-center allowResize" data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width: #width#;height: #height#;#style#">
+  <div class="widget-name">
+    <span style="color:#background-color#" title="#alert_name#">
+      <i class='#alert_icon#'></i>
+    </span>
+    <span class="cmd refresh pull-right cursor" data-cmd_id="#refresh_id#">
+      <i class="fas fa-sync"></i>
+    </span>
+    <span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
+    <a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
+  </div>
+  #tabHtmlJours#
+  <script>
+    document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh').addEventListener('click', function() {
+      jeedom.cmd.execute({ id: '#refresh_id#' })
+    })
+    function mouseClick(element) {
+      var equipement = $(element).parents('.eqLogic').attr('data-eqLogic_id');
+      var dayperiods = $(element).attr('id');
+      if ($('#modal_infojour').length == 0) {
+        $('body').append('<div id="modal_infojour" title="#modaltxt#"></div>');
+        $("#modal_infojour").dialog({closeText: '', autoOpen: false, modal: true, height: 410, width: 580});
+      }
+      $('#modal_infojour').load('index.php?v=d&plugin=meteomc&modal=details&eqLogic='+equipement+'&jour='+dayperiods).dialog('open');
+    }
+  </script>
+</div>
+<style>
+  /* CSS GLOBAL */
+  .meteoMC {
+    padding: 0px 5px;
+  }
+  .meteoMC .meteoMCUnite {
+    font-size: 0.7em;
+  }
+  .meteoMC td {
+    padding: 2px 2px;
+    text-align: center;
+    box-sizing: border-box;
+    font-size: 0.85em;
+    text-align: center;
+    width: 130px !important;
+  }
+  .meteoMC .meteoMCTitre {
+    border-bottom: 1px dashed !important;
+    border-left: 1px solid transparent !important;
+    border-right: 1px solid transparent !important;
+  }
+  .meteoMC .meteoMCTitreDivJour {
+    margin-bottom: 2px;
+    width: 130px !important;
+  }
+  .meteoMC .meteoMCImgPrev {
+    height: 60px;
+    font-size: 0.7em;
+  }
+  .meteoMC .meteoMCImgPrev img {
+    max-width: 60px;
+    max-height: 60px;
+  }
+  .meteoMC .meteoMCCondition {
+    font-style: italic;
+    font-size: 0.75em !important;
+  }
+  .meteoMC .meteoMCData div {
+    padding: 2px 2px;
+  }
+  .meteoMC .meteoMCData div.meteoMCDatag {
+    margin-left: 0px;
+    width: 62px !important;
+    float: left;
+  }
+  .meteoMC .meteoMCData div.meteoMCDatad {
+    margin-left: 2px;
+    width: 62px !important;
+    float: left;
+  }
+  .meteoMC .meteoMCData div.meteoMCDataf {
+    width: 130px !important;
+  }
+  .meteoMC .meteoMCDataf img {
+    width: 20px;
+    vertical-align: middle;
+  }
+</style>
