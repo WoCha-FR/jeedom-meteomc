@@ -553,6 +553,11 @@ class meteomc extends eqLogic {
     $ref->setConfiguration('groupe','j0');
     $ref->setOrder($ordre);
     $ref->save();
+    // Recupération des données si necessaire
+    $fileMC = __DIR__ . '/../../data/'.$this->getId().'_meteomc.json';
+    if (!file_exists($fileMC) && $this->getConfiguration('meteomcinsee') != '') {
+      $this->updateFromMC();
+    }
   }
   
   private function makeMainWidget($version = 'dashboard') {
