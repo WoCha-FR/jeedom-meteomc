@@ -44,7 +44,7 @@ $affBrouill = $eqLogic->getConfiguration('affbrouill', 1);
 // HTML
 $_html = '<div class="meteoMC">';
 $_html.= '<div class="meteoPrevJours">';
-$_html.= '<table><tr>';
+$_html.= '<table class="tableCmd"><tr>';
 // Jour en cours d'affichage
 $tst_m = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'datetime_'.$jperiod, false, 'info', $eqLogic)->execCmd();
 if ($tst_m == $tst_j) {
@@ -54,12 +54,12 @@ if ($tst_m == $tst_j) {
 } else {
   $txtdate = $eqLogic->getJourName(date('N', $tst_m)).' '.date('d-m', $tst_m);
 }
-$_html.= '<td class="tableCmdcss meteoMCTitre" colspan="4">'.$txtdate.'</td>';
+$_html.= '<td class="meteoMCTitre" colspan="4">'.$txtdate.'</td>';
 $_html.= '</tr><tr>';
 // Ligne 1: Entete
 for ($i=0; $i<4; $i++) {
   $period = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'period_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
-  $_html.= '<td class="tableCmdcss meteoMCTitre"><div class="meteoMCTitreDivJour">'.$period.'</div></td>';
+  $_html.= '<td class="meteoMCTitre"><div class="meteoMCTitreDivJour">'.$period.'</div></td>';
 }
 // Ligne 2: Image de prévision
 $_html.= '</tr><tr>';
@@ -70,20 +70,20 @@ for ($i=0; $i<4; $i++) {
     $imgfile = $eqLogic->getConditionImg(cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'weather_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd());
   }
   $imgtxt = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'weathertxt_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
-  $_html.= '<td class="tableCmdcss meteoMCImgPrev">';
+  $_html.= '<td class="meteoMCImgPrev">';
   $_html.= '<img src="/'.$imgdir.'/'.$imgfile.'" title="'.$imgtxt.'" alt="'.$imgtxt.'" /></td>';
 }
 // Ligne 3: Texte prévision
 $_html.= '</tr><tr>';
 for ($i=0; $i<4; $i++) {
   $imgtxt = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'weathertxt_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
-  $_html.= '<td class="tableCmdcss meteoMCCondition">'.$imgtxt.'</td>';
+  $_html.= '<td class="meteoMCCondition">'.$imgtxt.'</td>';
 }
 // Ligne 4: Température
 $_html.= '</tr><tr>';
 for ($i=0; $i<4; $i++) {
   $temperature = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'temp2m_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
-  $_html.= '<td class="tableCmdcss meteoMCData"><div class="meteoMCDataf" title="'.__("Température", __FILE__).'">';
+  $_html.= '<td class="meteoMCData"><div class="meteoMCDataf" title="'.__("Température", __FILE__).'">';
   $_html.= '<i class="fas fa-thermometer-half"></i> '.$temperature.'<span class="meteoMCUnite"> °C</span></div></td>';
 }
 // OPT Ligne 8: Vent moyen & direction
@@ -92,7 +92,7 @@ if ($affVentMoy == 1) {
   for ($i=0; $i<4; $i++) {
     $vitwind = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'wind10m_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
     $dirwind = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'dirwind10m_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
-    $_html.= '<td class="tableCmdcss meteoMCData"><div class="meteoMCDataf">';
+    $_html.= '<td class="meteoMCData"><div class="meteoMCDataf">';
     $_html.= '<i class="icon jeedomapp-wind" title="'.__("Vent moyen", __FILE__).'"></i> '.$vitwind.'<span class="meteoMCUnite"> km/h</span>'; 
     $_html.= '<img src="/'.$imgdir.'/vent.png" style="transform:rotate('.$dirwind.'deg)" title="'.$dirwind.'°" alt="'.$dirwind.'°"></div></td>';
   }
@@ -102,7 +102,7 @@ if ($affVentRaf == 1) {
   $_html.= '</tr><tr>';
   for ($i=0; $i<4; $i++) {
     $vitwind = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'gust10m_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
-    $_html.= '<td class="tableCmdcss meteoMCData">';
+    $_html.= '<td class="meteoMCData">';
     $_html.= '<div class="meteoMCDataf" title="'.__("Rafales", __FILE__).'"><i class="fas fa-wind"></i> '.$vitwind.'<span class="meteoMCUnite"> km/h</span></div></td>';
   }
 }
@@ -112,7 +112,7 @@ if ($affPluiePr == 1) {
   for ($i=0; $i<4; $i++) {
     $pluie = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'rr10_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
     $probapluie = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'probarain_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
-    $_html.= '<td class="tableCmdcss meteoMCData">';
+    $_html.= '<td class="meteoMCData">';
     $_html.= '<div class="meteoMCDatag" title="'.__("Cumul de pluie", __FILE__).'"><i class="fas fa-cloud-rain"></i> '.$pluie.'<span class="meteoMCUnite"> mm</span></div>';
     $_html.= '<div class="meteoMCDatad" title="'.__("Risque de pluie", __FILE__).'"><i class="far fa-clock"></i> '.$probapluie.'<span class="meteoMCUnite"> %</span></div>';
     $_html.= '</td>';
@@ -123,7 +123,7 @@ if ($affPluieMx == 1) {
   $_html.= '</tr><tr>';
   for ($i=0; $i<4; $i++) {
     $pluiemax = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'rr1_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
-    $_html.= '<td class="tableCmdcss meteoMCData"><div class="meteoMCDataf" title="'.__("Cumul de pluie max", __FILE__).'">';
+    $_html.= '<td class="meteoMCData"><div class="meteoMCDataf" title="'.__("Cumul de pluie max", __FILE__).'">';
     $_html.= '<i class="fas fa-cloud-rain icon_red"></i> '.$pluiemax.'<span class="meteoMCUnite"> mm</span></div></td>';
   }
 }
@@ -133,7 +133,7 @@ if ($affVenProb == 1) {
   for ($i=0; $i<4; $i++) {
     $p70 = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'probawind70_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
     $p100 = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'probawind100_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
-    $_html.= '<td class="tableCmdcss meteoMCData">';
+    $_html.= '<td class="meteoMCData">';
     $_html.= '<div class="meteoMCDatag" title="'.__("Risque de vent 70 kmh", __FILE__).'"><i class="fas fa-wind icon_orange"></i> '.$p70.'<span class="meteoMCUnite"> %</span></div>';
     $_html.= '<div class="meteoMCDatad" title="'.__("Risque de vent 100 kmh", __FILE__).'"><i class="fas fa-wind icon_red"></i> '.$p100.'<span class="meteoMCUnite"> %</span></div></td>';
   }
@@ -143,7 +143,7 @@ if ($affGelProb == 1) {
   $_html.= '</tr><tr>';
   for ($i=0; $i<4; $i++) {
     $pgel = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'probafrost_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
-    $_html.= '<td class="tableCmdcss meteoMCData">';
+    $_html.= '<td class="meteoMCData">';
     $_html.= '<div class="meteoMCDataf" title="'.__("Risque de gel", __FILE__).'"><i class="far fa-snowflake"></i> '.$pgel.'<span class="meteoMCUnite"> %</span></div></td>';
   }
 }
@@ -152,7 +152,7 @@ if ($affBrouill == 1) {
   $_html.= '</tr><tr>';
   for ($i=0; $i<4; $i++) {
     $pfog = cmd::byEqLogicIdAndLogicalId($eqLogic_id, 'probafog_'.$jperiod.'p'.$i, false, 'info', $eqLogic)->execCmd();
-    $_html.= '<td class="tableCmdcss meteoMCData">';
+    $_html.= '<td class="meteoMCData">';
     $_html.= '<div class="meteoMCDataf" title="'.__("Risque de brouillard", __FILE__).'"><i class="fas fa-water"></i> '.$pfog.'<span class="meteoMCUnite"> %</span></div></td>';
   }  
 }

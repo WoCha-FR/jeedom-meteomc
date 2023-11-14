@@ -553,6 +553,11 @@ class meteomc extends eqLogic {
     $ref->setConfiguration('groupe','j0');
     $ref->setOrder($ordre);
     $ref->save();
+    // Recupération des données si necessaire
+    $fileMC = __DIR__ . '/../../data/'.$this->getId().'_meteomc.json';
+    if (!file_exists($fileMC) && $this->getConfiguration('meteomcinsee') != '') {
+      $this->updateFromMC();
+    }
   }
   
   private function makeMainWidget($version = 'dashboard') {
@@ -595,43 +600,43 @@ class meteomc extends eqLogic {
     // Génération HTML
     $_html.= '<div id="meteoMC#uid#" class="meteoMC">';
     $_html.= '<div class="meteoPrevJours" data-equipement="#uid#">';
-    $_html.= '<table>';
+    $_html.= '<table class="tableCmd">';
     // Ligne 1: Entete
     $_html.= '<tr>';
     if ($affPeriodN == 1) {
-      $_html.= '<td class="tableCmdcss meteoMCTitre">';
+      $_html.= '<td class="meteoMCTitre">';
       $_html.= '<div class="meteoMCTitreDivJour">#PNOW#</div></td>';
     }
     for ($i=0; $i<$affNbJours; $i++) {
-      $_html.= '<td class="tableCmdcss meteoMCTitre">';
+      $_html.= '<td class="meteoMCTitre">';
       $_html.= '<div id="j'.$i.'" onclick="mouseClick(this)" class="meteoMCTitreDivJour" style="cursor: alias;">#JOUR'.$i.'# #DATE'.$i.'#</div></td>';
     }
     // Ligne 2: Image de prévision
     $_html.= '</tr><tr>';
     if ($affPeriodN == 1) {
-      $_html.= '<td class="tableCmdcss meteoMCImgPrev">';
+      $_html.= '<td class="meteoMCImgPrev">';
       $_html.= '<img src="/'.$imgdir.'/#weatherimg_p#" title="#weathertxt_p#" alt="#weathertxt_p#" /></td>';
     }
     for ($i=0; $i<$affNbJours; $i++) {
-      $_html.= '<td class="tableCmdcss meteoMCImgPrev">';
+      $_html.= '<td class="meteoMCImgPrev">';
       $_html.= '<img src="/'.$imgdir.'/#weatherimg_j'.$i.'#" title="#weathertxt_j'.$i.'#" alt="#weathertxt_j'.$i.'#" /></td>';
     }
     // Ligne 3: Texte prévision
     $_html.= '</tr><tr>';
     if ($affPeriodN == 1) {
-      $_html.= '<td class="tableCmdcss meteoMCCondition">#weathertxt_p#</td>';
+      $_html.= '<td class="meteoMCCondition">#weathertxt_p#</td>';
     }
     for ($i=0; $i<$affNbJours; $i++) {
-      $_html.= '<td class="tableCmdcss meteoMCCondition">#weathertxt_j'.$i.'#</td>';
+      $_html.= '<td class="meteoMCCondition">#weathertxt_j'.$i.'#</td>';
     }
     // Ligne 4: Température MIN & MAX
     $_html.= '</tr><tr>';
     if ($affPeriodN == 1) {
-      $_html.= '<td class="tableCmdcss meteoMCData">';
+      $_html.= '<td class="meteoMCData">';
       $_html.= '<div class="meteoMCDataf" title="'.__("Température", __FILE__).'"><i class="fas fa-thermometer-half"></i> #tact#<span class="meteoMCUnite"> °C</span></div></td>';
     }
     for ($i=0; $i<$affNbJours; $i++) {
-      $_html.= '<td class="tableCmdcss meteoMCData">';
+      $_html.= '<td class="meteoMCData">';
       $_html.= '<div class="meteoMCDatag"><i class="fas fa-temperature-low icon_blue" title="'.__("Température mini", __FILE__).'"></i> #tmin_j'.$i.'#<span class="meteoMCUnite"> °C</span></div>';
       $_html.= '<div class="meteoMCDatad"><i class="fas fa-temperature-high icon_red" title="'.__("Température maxi", __FILE__).'"></i> #tmax_j'.$i.'#<span class="meteoMCUnite"> °C</span></div></td>';
     }
@@ -642,7 +647,7 @@ class meteomc extends eqLogic {
         $_html.= '<td></td>';
       }
       for ($i=0; $i<$affNbJours; $i++) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDatag"><i class="fas fa-sun" title="'.__("Lever soleil", __FILE__).'"></i> #sunrise_j'.$i.'#</div>';
         $_html.= '<div class="meteoMCDatad"><i class="far fa-sun" title="'.__("Coucher soleil", __FILE__).'"></i> #sunset_j'.$i.'#</div></td>';
       }
@@ -654,7 +659,7 @@ class meteomc extends eqLogic {
         $_html.= '<td></td>';
       }
       for ($i=0; $i<$affNbJours; $i++) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDatag"><i class="fas fa-clock icon_yellow" title="'.__("Durée jour", __FILE__).'"></i> #duration_day_j'.$i.'#</div>';
         $_html.= '<div class="meteoMCDatad"><i class="fas fa-history" title="'.__("Variation de durée", __FILE__).'"></i> #diff_duration_day_j'.$i.'#<span class="meteoMCUnite"> min</span></div></td>';
       }
@@ -666,7 +671,7 @@ class meteomc extends eqLogic {
         $_html.= '<td></td>';
       }
       for ($i=0; $i<$affNbJours; $i++) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDataf" title="'.__("Ensoleillement", __FILE__).'"><i class="fas fa-sun icon_yellow"></i> #sun_hours_j'.$i.'#<span class="meteoMCUnite"> h</span></div></td>';
       }
     }
@@ -677,19 +682,19 @@ class meteomc extends eqLogic {
         $_html.= '<td></td>';
       }
       for ($i=0; $i<$affNbJours; $i++) {
-        $_html.= '<td class="tableCmdcss meteoMCCondition">#moon_phase_j'.$i.'#</td>';
+        $_html.= '<td class="meteoMCCondition">#moon_phase_j'.$i.'#</td>';
       }
     }
     // OPT Ligne 8: Vent moyen & direction
     if ($affVentMoy == 1) {
       $_html.= '</tr><tr>';
       if ($affPeriodN == 1) {
-        $_html.= '<td class="tableCmdcss meteoMCData"><div class="meteoMCDataf">';
+        $_html.= '<td class="meteoMCData"><div class="meteoMCDataf">';
         $_html.= '<i class="icon jeedomapp-wind" title="'.__("Vent moyen", __FILE__).'"></i> #wind10m_p#<span class="meteoMCUnite"> km/h</span>';
         $_html.= '<img src="/'.$imgdir.'/vent.png" style="transform:rotate(#dirwind10m_p#deg)" title="#dirwind10m_p#°" alt="#dirwind10m_p#°"></div></td>';
       }
       for ($i=0; $i<$affNbJours; $i++) {
-        $_html.= '<td class="tableCmdcss meteoMCData"><div class="meteoMCDataf">';
+        $_html.= '<td class="meteoMCData"><div class="meteoMCDataf">';
         $_html.= '<i class="icon jeedomapp-wind" title="'.__("Vent moyen", __FILE__).'"></i> #wind10m_j'.$i.'#<span class="meteoMCUnite"> km/h</span>';
         $_html.= '<img src="/'.$imgdir.'/vent.png" style="transform:rotate(#dirwind10m_j'.$i.'#deg)" title="#dirwind10m_j'.$i.'#°" alt="#dirwind10m_j'.$i.'#°"></div></td>';
       }
@@ -698,11 +703,11 @@ class meteomc extends eqLogic {
     if ($affVentRaf == 1) {
       $_html.= '</tr><tr>';
       if ($affPeriodN == 1) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDataf" title="'.__("Rafales", __FILE__).'"><i class="fas fa-wind"></i> #gust10m_p#<span class="meteoMCUnite"> km/h</span></div></td>';
       }
       for ($i=0; $i<$affNbJours; $i++) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDataf" title="'.__("Rafales", __FILE__).'"><i class="fas fa-wind"></i> #gust10m_j'.$i.'#<span class="meteoMCUnite"> km/h</span></div></td>';
       }
     }
@@ -710,13 +715,13 @@ class meteomc extends eqLogic {
     if ($affPluiePr == 1) {
       $_html.= '</tr><tr>';
       if ($affPeriodN == 1) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDatag" title="'.__("Cumul de pluie", __FILE__).'"><i class="fas fa-cloud-rain"></i> #rr10_p#<span class="meteoMCUnite"> mm</span></div>';
         $_html.= '<div class="meteoMCDatad" title="'.__("Risque de pluie", __FILE__).'"><i class="far fa-clock"></i> #probarain_p#<span class="meteoMCUnite"> %</span></div>';
         $_html.= '</td>';
       }
       for ($i=0; $i<$affNbJours; $i++) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDatag" title="'.__("Cumul de pluie", __FILE__).'"><i class="fas fa-cloud-rain"></i> #rr10_j'.$i.'#<span class="meteoMCUnite"> mm</span></div>';
         $_html.= '<div class="meteoMCDatad" title="'.__("Risque de pluie", __FILE__).'"><i class="far fa-clock"></i> #probarain_j'.$i.'#<span class="meteoMCUnite"> %</span></div>';
         $_html.= '</td>';
@@ -726,11 +731,11 @@ class meteomc extends eqLogic {
     if ($affPluieMx == 1) {
       $_html.= '</tr><tr>';
       if ($affPeriodN == 1) {
-        $_html.= '<td class="tableCmdcss meteoMCData"><div class="meteoMCDataf" title="'.__("Cumul de pluie max", __FILE__).'">';
+        $_html.= '<td class="meteoMCData"><div class="meteoMCDataf" title="'.__("Cumul de pluie max", __FILE__).'">';
         $_html.= '<i class="fas fa-cloud-rain icon_red"></i> #rr1_p#<span class="meteoMCUnite"> mm</span></div></td>';
       }
       for ($i=0; $i<$affNbJours; $i++) {
-        $_html.= '<td class="tableCmdcss meteoMCData"><div class="meteoMCDataf" title="'.__("Cumul de pluie max", __FILE__).'">';
+        $_html.= '<td class="meteoMCData"><div class="meteoMCDataf" title="'.__("Cumul de pluie max", __FILE__).'">';
         $_html.= '<i class="fas fa-cloud-rain icon_red"></i> #rr1_j'.$i.'#<span class="meteoMCUnite"> mm</span></div></td>';
       }
     }
@@ -738,12 +743,12 @@ class meteomc extends eqLogic {
     if ($affVenProb == 1) {
       $_html.= '</tr><tr>';
       if ($affPeriodN == 1) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDatag" title="'.__("Risque de vent 70 kmh", __FILE__).'"><i class="fas fa-wind icon_orange"></i> #probawind70_p#<span class="meteoMCUnite"> %</span></div>';
         $_html.= '<div class="meteoMCDatad" title="'.__("Risque de vent 100 kmh", __FILE__).'"><i class="fas fa-wind icon_red"></i> #probawind100_p#<span class="meteoMCUnite"> %</span></div></td>';
       }
       for ($i=0; $i<$affNbJours; $i++) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDatag" title="'.__("Risque de vent 70 kmh", __FILE__).'"><i class="fas fa-wind icon_orange"></i> #probawind70_j'.$i.'#<span class="meteoMCUnite"> %</span></div>';
         $_html.= '<div class="meteoMCDatad" title="'.__("Risque de vent 100 kmh", __FILE__).'"><i class="fas fa-wind icon_red"></i> #probawind100_j'.$i.'#<span class="meteoMCUnite"> %</span></div></td>';
       }
@@ -752,11 +757,11 @@ class meteomc extends eqLogic {
     if ($affGelProb == 1) {
       $_html.= '</tr><tr>';
       if ($affPeriodN == 1) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDataf" title="'.__("Risque de gel", __FILE__).'"><i class="far fa-snowflake"></i> #probfrost_p#<span class="meteoMCUnite"> %</span></div></td>';
       }
       for ($i=0; $i<$affNbJours; $i++) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDataf" title="'.__("Risque de gel", __FILE__).'"><i class="far fa-snowflake"></i> #probfrost_j'.$i.'#<span class="meteoMCUnite"> %</span></div></td>';
       }
     }
@@ -764,11 +769,11 @@ class meteomc extends eqLogic {
     if ($affBrouill == 1) {
       $_html.= '</tr><tr>';
       if ($affPeriodN == 1) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDataf" title="'.__("Risque de brouillard", __FILE__).'"><i class="fas fa-water"></i> #probfog_p#<span class="meteoMCUnite"> %</span></div></td>';
       }
       for ($i=0; $i<$affNbJours; $i++) {
-        $_html.= '<td class="tableCmdcss meteoMCData">';
+        $_html.= '<td class="meteoMCData">';
         $_html.= '<div class="meteoMCDataf" title="'.__("Risque de brouillard", __FILE__).'"><i class="fas fa-water"></i> #probfog_j'.$i.'#<span class="meteoMCUnite"> %</span></div></td>';
       }
     }
