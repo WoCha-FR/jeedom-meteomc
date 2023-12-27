@@ -4,6 +4,9 @@
 >
 >If there is no information about the update, this means that it only concerns documentation, translation or text updates.
 
+# 27/12/2023
+- Error 500 filtering when calling the API
+
 # 14/11/2023
 - Modifying the widget's CSS
 

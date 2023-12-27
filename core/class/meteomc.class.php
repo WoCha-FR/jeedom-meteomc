@@ -51,7 +51,7 @@ class meteomc extends eqLogic {
     $return = json_decode($request_http->exec(30,1), true);
     $return = is_json($return, $return);
     // Erreur
-    if (isset($return['code'])) {
+    if (isset($return['code']) && $return['code'] != '500') {
       log::add(__CLASS__, 'error', 'Code: ' . $return['code'] . ' ' . $return['message'] . ' ' . $url);
     }
     return $return;
