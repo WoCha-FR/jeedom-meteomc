@@ -52,7 +52,7 @@
         "Détails du jour": "Details of the day",
         "Ensoleillement": "Sunshine",
         "Jeudi": "Thursday",
-        "L'identifiant de la ville ne peut être vide": "The city identifier cannot be empty",
+        "L\\'identifiant de la ville ne peut être vide": "",
         "Lever soleil": "Sunrise",
         "Lundi": "Monday",
         "Mardi": "Tuesday",
@@ -151,11 +151,11 @@
         "Vent moyen": "Medium wind"
     },
     "plugins\/meteomc\/desktop\/php\/meteomc.php": {
-        "401 - Accès non autorisé": "401 - Unauthorized Access",
         "1": "1",
         "2": "2",
         "3": "3",
         "4": "4",
+        "401 - Accès non autorisé": "401 - Unauthorized Access",
         "5": "5",
         "Actions": "Action",
         "Activer": "Enable",
